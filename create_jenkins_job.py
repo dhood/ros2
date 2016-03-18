@@ -79,7 +79,7 @@ def main(argv=None):
 
     os_configs = {
         'linux': {
-            'label_expression': 'linux_slave_on_master',
+            'label_expression': 'linux',
             'shell_type': 'Shell',
         },
         'osx': {
@@ -94,11 +94,11 @@ def main(argv=None):
             'shell_type': 'BatchFile',
         },
         'linux-armhf': {
-            'label_expression': 'linux_slave_on_master',
+            'label_expression': 'linux',
             'shell_type': 'Shell',
         },
         'linux-aarch64': {
-            'label_expression': 'linux_slave_on_master',
+            'label_expression': 'linux',
             'shell_type': 'Shell',
         },
     }
