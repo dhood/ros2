@@ -5,7 +5,6 @@ MAINTAINER Brian Gerkey <gerkey@osrfoundation.org>
 # See: http://askubuntu.com/questions/506158/unable-to-initialize-frontend-dialog-when-using-ssh
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN file `which local-gen`
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 
