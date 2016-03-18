@@ -112,6 +112,9 @@ def get_args(sysargv=None, skip_white_space_in=False, skip_connext=False, add_ro
     parser.add_argument(
         '--ament-args', default=None,
         help='arguments passed to ament')
+    parser.add_argument(
+        '--src-mounted', default=False, action='store_true',
+        help="src directory is already mounted into the workspace")
 
     argv = sysargv[1:] if sysargv is not None else sys.argv[1:]
     argv, ament_args = extract_argument_group(argv, '--ament-args')
@@ -207,10 +210,6 @@ def run(args, build_function):
         from .windows_batch import WindowsBatchJob
         job = WindowsBatchJob(args)
 
-    src_mounted_from_host = False
-    if 'armv7' in platform_name:
-        src_mounted_from_host = True
-
     if args.do_venv and args.os == 'windows':
         sys.exit("--do-venv is not supported on windows")
 
@@ -225,7 +224,7 @@ def run(args, build_function):
     # git doesn't work reliably inside qemu, so we're assuming that somebody
     # already checked out the code on the host and mounted it in at the right
     # place in <workspace>/src, which we don't want to remove here.
-    if src_mounted_from_host:
+    if args.src_mounted:
         remove_folder(os.path.join(args.workspace, 'build'))
         remove_folder(os.path.join(args.workspace, 'install'))
     else:
@@ -278,7 +277,7 @@ def run(args, build_function):
         # Skip git operations on arm because git doesn't work in qemu. Assume
         # that somebody has already pulled the code on the host and mounted it
         # in.
-        if not src_mounted_from_host:
+        if not args.src_mounted:
             print('# BEGIN SUBSECTION: import repositories')
             # Get the repositories
             job.run(['curl', '-sk', args.repo_file_url, '-o', 'ros2.repos'])
