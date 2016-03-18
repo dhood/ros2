@@ -93,6 +93,14 @@ def main(argv=None):
             'label_expression': 'windows_slave_eatable',
             'shell_type': 'BatchFile',
         },
+        'linux-armhf': {
+            'label_expression': 'linux_slave_on_master',
+            'shell_type': 'Shell',
+        },
+        'linux-aarch64': {
+            'label_expression': 'linux_slave_on_master',
+            'shell_type': 'Shell',
+        },
     }
 
     jenkins_kwargs = {}
@@ -110,6 +118,10 @@ def main(argv=None):
         job_data['cmake_build_type'] = 'None'
         job_config = expand_template('ci_job.xml.template', job_data)
         configure_job(jenkins, job_name, job_config, **jenkins_kwargs)
+
+        # skip non-manual jobs on ARM for now
+        if 'arm' in os_name:
+            continue
 
         # all following jobs are triggered nightly with email notification
         job_data['time_trigger_spec'] = '0 11 * * *'
