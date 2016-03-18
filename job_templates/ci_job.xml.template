@@ -146,9 +146,11 @@ echo "# BEGIN SECTION: Build Dockerfile"
 docker build -t ros2_batch_ci_armhf linux_armhf_docker_resources
 @[elif os_name == 'linux-aarch64']@
 docker build -t ros2_batch_ci_aarch64 linux_aarch64_docker_resources
-@[else]@
+@[elif os_name == 'linux']@
 docker build -t ros2_batch_ci linux_docker_resources
-@[endif]@
+@[else]@
+@{ assert 'Unknown os_name: ' + os_name }@
+@[end if]@
 echo "# END SECTION"
 echo "# BEGIN SECTION: Run Dockerfile"
 @[if os_name in ['linux-armhf', 'linux-aarch64']]@
@@ -158,12 +160,16 @@ curl -sk https://raw.githubusercontent.com/ros2/ros2/master/ros2.repos -o $tmpd/
 vcs import $tmpd/src --input $tmpd/ros2.repos
 @[if os_name == 'linux-armhf]@
 docker run --privileged -e UID=`id -u` -e GID=`id -g` -e CI_ARGS="$CI_ARGS --src-mounted" -e CCACHE_DIR=/home/rosbuild/.ccache -i -v `pwd`:/home/rosbuild/ci_scripts -v $HOME/.ccache:/home/rosbuild/.ccache -v $tmpd/src:/home/rosbuild/ci_scripts/ws/src ros2_batch_ci_armhf
-@[else]@
+@[elif os_name == 'linux-aarch64']@
 docker run --privileged -e UID=`id -u` -e GID=`id -g` -e CI_ARGS="$CI_ARGS --src-mounted" -e CCACHE_DIR=/home/rosbuild/.ccache -i -v `pwd`:/home/rosbuild/ci_scripts -v $HOME/.ccache:/home/rosbuild/.ccache -v $tmpd/src:/home/rosbuild/ci_scripts/ws/src ros2_batch_ci_aarch64
+@[else]@
+@{ assert 'Unknown os_name: ' + os_name }@
 @[end if]@
 rm -rf $tmpd
-@[else]@
+@[elif os_name == 'linux']@
 docker run --privileged -e UID=`id -u` -e GID=`id -g` -e CI_ARGS="$CI_ARGS" -e CCACHE_DIR=/home/rosbuild/.ccache -i -v `pwd`:/home/rosbuild/ci_scripts -v $HOME/.ccache:/home/rosbuild/.ccache ros2_batch_ci
+@[else]@
+@{ assert 'Unknown os_name: ' + os_name }@
 @[end if]@
 echo "# END SECTION"
 @[else]@
