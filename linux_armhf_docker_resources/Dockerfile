@@ -42,7 +42,7 @@ RUN apt-get update && apt-get install -y libopensplice64
 RUN sed -i "s/<Id>0<\/Id>/<Id>108<\/Id>/" /usr/etc/opensplice/config/ospl.xml
 
 # Install the RTI dependencies.
-RUN apt-get update && apt-get install -y default-jre-headless
+#RUN apt-get update && apt-get install -y default-jre-headless
 
 # Add and install the RTI binaries we made.
 #ADD rticonnextdds-src/librticonnextdds52_5.2.0-1_amd64.deb /tmp/librticonnextdds52_5.2.0-1_amd64.deb
