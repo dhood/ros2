@@ -40,7 +40,7 @@ RUN apt-get update && apt-get install -y python3-pip
 RUN pip3 install -U setuptools pip virtualenv
 
 # Install the OpenSplice binary from the OSRF repositories.
-RUN apt-get update && apt-get install -y libopensplice64
+#RUN apt-get update && apt-get install -y libopensplice64
 
 # Install OpenCV.
 RUN apt-get update && apt-get install -y libopencv-dev
